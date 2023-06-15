@@ -1,5 +1,6 @@
 import { useTaskManager } from "@/store/useTaskManager";
 import React, { ChangeEvent, useRef } from "react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface Task {
   id: number;
@@ -11,6 +12,7 @@ const TaskManager = () => {
   const createTaskRef = useRef<HTMLInputElement>(null);
   const { tasks, searchTask, addTask, updateTask, deleteTask, setSearchTask } =
     useTaskManager();
+  const { value, setValue } = useLocalStorage("tasks");
 
   const handleAddTask = () => {
     const title = createTaskRef?.current?.value || ""; // Replace with the value in the createTaskRef
@@ -20,6 +22,7 @@ const TaskManager = () => {
       completed: false,
     };
     addTask(newTask);
+    setValue(tasks);
   };
 
   const handleUpdateTask = (taskId: number, updatedTask: Task) => {
@@ -35,7 +38,7 @@ const TaskManager = () => {
   };
 
   // See! I already give you everything!
-  const filteredTasks = tasks.filter((task) =>
+  const filteredTasks = tasks.filter((task: Task) =>
     task.title.toLowerCase().includes(searchTask.toLowerCase())
   );
 
@@ -50,7 +53,7 @@ const TaskManager = () => {
       <input type="text" onChange={handleSearch} placeholder="Search Task" />
 
       <ul>
-        {filteredTasks.map((task) => (
+        {filteredTasks.map((task: Task) => (
           <li key={task.id}>
             <input
               type="text"
