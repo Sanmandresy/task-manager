@@ -1,0 +1,7 @@
+const useLocalStorage = () => {
+
+}
+
+export {
+  useLocalStorage
+}
